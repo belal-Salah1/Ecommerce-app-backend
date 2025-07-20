@@ -1,47 +1,62 @@
-🛠️ E-commerce Backend API
-A scalable and secure backend for an e-commerce application built with Node.js, Express, and MongoDB.
+# 🛠️ E-commerce Backend Project
 
-🔐 Authentication & Authorization
-JWT-based authentication: Secure login & registration system using access tokens.
+A scalable and secure backend for my e-commerce application built with **Node.js**, **Express**, and **MongoDB**.
 
-Password hashing & confirmation: Implemented using crypto-js for enhanced security.
+---
 
-Role-based authorization: Admin/user permissions handled via middleware.
+## 🔐 Authentication & Authorization
 
-⚙️ CRUD Operations
-Full Create, Read, Update, Delete support for core resources like:
+- **JWT-based Authentication**  
+  Secure login & registration system using **access tokens**.
 
-Categories
+- **Password Hashing & Confirmation**  
+  Implemented using `crypto-js` to enhance security and prevent leaks.
 
-Products
+- **Role-based Access Control**  
+  Admin/manager/user permissions handled via custom middleware:
+  - `verifyToken`
+  - `allowedTo(...roles)`
 
-Users
+---
 
-Orders (if implemented)
+## ⚙️ CRUD Operations
 
-Built using controller-service architecture for clean and maintainable code.
+Fully implemented CRUD functionality for core resources:
 
-🧩 Custom Middleware
-asyncWrapper: Handles errors in async route handlers without try-catch blocks.
+- 📁 Categories  
+- 📦 Products  
+- 👤 Users  
+- 📦 Orders *(if implemented)*  
 
-verifyToken: Verifies JWT tokens for protected routes.
+> Built using a **controller-service** pattern for cleaner, maintainable architecture.
 
-allowedTo(...roles): Role-based access control middleware that restricts route access to specific user roles (e.g., admin, manager, user).
+---
 
-📦 Features
-User registration and login
+## 🧩 Custom Middleware
 
-Token-based authentication using JWT
+- `asyncWrapper`:  
+  Wraps async route handlers to catch errors without try/catch blocks.
 
-Password hashing and matching with crypto-js
+- `verifyToken`:  
+  Verifies JWT tokens and attaches user data to the request.
 
-Role-based route protection
+- `allowedTo(...roles)`:  
+  Protects routes based on user roles (e.g., `admin`, `manager`, `user`).
 
-RESTful API with full CRUD operations
+---
 
-Modular controller-service structure
+## 📦 Features
 
-Centralized error handling
+- User registration & login  
+- JWT token-based authentication  
+- Password hashing with `crypto-js`  
+- Role-based route protection  
+- RESTful API with full CRUD support  
+- Modular controller-service architecture  
+- Centralized error handling  
+- Reusable middleware functions  
 
-Reusable middleware functions
+
+
+
 

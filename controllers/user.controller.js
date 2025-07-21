@@ -4,7 +4,7 @@ const User = require('../models/users.schema');
 const appError = require('../utilites/appError');
 const statusCodeText = require('../utilites/statusCodeText');
 const generateJwt = require('../utilites/generateJwt');
-
+const userService = require('../services/user.service ');
 const userRegister = asyncWrapper(async (req, res) => {
     const {name , email , password , role } = req.body;
     if(!name || !email || !password){
@@ -16,7 +16,7 @@ const userRegister = asyncWrapper(async (req, res) => {
     if(existUser){
         throw new appError(statusCodeText.FAIL, 400, 'User already exists ,please login');
     }
-    const user = await new User(newUser);
+    const user = await userService.createUser(newUser);
     const token = await generateJwt({email: user.email , password: user.password, role: user.role});
     user.token = token;
     await user.save();
@@ -32,7 +32,7 @@ const userLogIn = asyncWrapper(async(req, res)=>{
     if(!email || !password){
         throw new appError(statusCodeText.FAIL, 400, 'Please provide email and password');
     }
-    const user = await User.findOne({email});
+    const user = await userService.getUserByEmail(email);
     if(!user){
         throw new appError(statusCodeText.FAIL, 400, 'User not exist, please register');
     }

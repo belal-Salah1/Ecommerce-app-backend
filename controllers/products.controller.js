@@ -1,29 +1,27 @@
-const Product = require('../models/products.schema');
 const asyncWrapper = require('../middlewares/asyncWrapper');
 const statusCodeText = require('../utilites/statusCodeText');
 const appError = require('../utilites/appError');
+const productService = require('../services/product.service ');
+const getId = require('../utilites/getId');
+const productsHelper = require('../helpers/products.helper');
+const { get } = require('mongoose');
+
 const getAllProducts = asyncWrapper(async(req , res )=>{
-    const products = await Product.find({}, {'_v':false , "_id":false});
-    if(!products || products.length === 0){
-        throw new appError(statusCodeText.FAIL, 404, 'No products found');
-    }
+    const products = await productService.getAllProducts();
+    productsHelper.validateProductsExist(products);
     res.status(200).json({status:statusCodeText.SUCCESS , data:{products}} );
 })
 
 const getProductById = asyncWrapper(async(req,res)=>{
-    const pdId = +req.params.pdId;
-    const product = await Product.findOne({pdId}, {'__v':false , "_id":false});
-    if(!product){
-        throw new appError(statusCodeText.FAIL, 404, 'no product found maybe an invalid id');
-    }   
+    const pdId = getId(req);
+    const product = await productService.getProductById(pdId);
+    productsHelper.validateProductExist(product);
     res.status(200).json({status:statusCodeText.SUCCESS , data:{product}});
 })
 
 const addProduct = asyncWrapper(async(req , res )=>{
     const {pdId, pdName, pdDesc , pdPrice,pdCategory ,pdSubCategory , pdImg , pdSize} = req.body;
-    if(!pdId || !pdName || !pdDesc || !pdPrice || !pdCategory || !pdSubCategory || !pdImg){
-        throw new appError(statusCodeText.FAIL, 400, 'Please provide all required fields');
-    }
+    productsHelper.validateAllFieldsProvided({pdId, pdName, pdDesc, pdPrice, pdCategory, pdSubCategory, pdImg});
     const newProduct = {
         pdId,
         pdName,
@@ -34,26 +32,22 @@ const addProduct = asyncWrapper(async(req , res )=>{
         pdImg,
         pdSize
     }
-    const product = await new Product(newProduct);
+    const product = await productService.addProduct(newProduct);
     await product.save();
     res.status(201).json({status:statusCodeText.SUCCESS , message:'Product added successfully', data:{product}});
 })
 
 const updateProduct = asyncWrapper(async(req, res )=>{
-    const pdId = +req.params.pdId;
-    const product = await Product.findOneAndUpdate({pdId}, req.body, {'__v': false , '_id':true});
-    if(!product){
-        throw new appError(statusCodeText.FAIL, 404, 'Product not found');
-    }
+    const pdId = getId(req);
+    const product = await productService.updateProduct(pdId, req.body);
+    productsHelper.validateProductExist(product)
     res.status(200).json({status:statusCodeText.SUCCESS , message:'Product updated successfully', data:{product}});
 })
 const deleteProduct = asyncWrapper(async(req, res )=>{
-    const pdId = +req.params.pdId;
-    const product = await Product.findOneAndDelete({pdId}, {'__v': false , '_id':true});
-    if(!product){
-        throw new appError(statusCodeText.FAIL, 404, 'Product not found');
-    }
-    res.status(200).json({status:statusCodeText.SUCCESS , message:'Product deleted successfully', data:{product}});
+    const pdId = getId(req);
+    const product = await productService.deleteProduct(pdId);
+    productsHelper.validateProductExist(product);
+    res.status(200).json({status:statusCodeText.SUCCESS , message:'Product deleted successfully', data:null});
 })
 
 module.exports = {

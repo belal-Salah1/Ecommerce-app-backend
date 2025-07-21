@@ -3,7 +3,7 @@ const subCatagorySchema =  mongoose.Schema({
     id :{
         type: Number,
         required: true,
-
+        unique: true
     },
     categories :{
         type: String,

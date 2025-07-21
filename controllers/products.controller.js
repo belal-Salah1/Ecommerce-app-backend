@@ -3,25 +3,25 @@ const statusCodeText = require('../utilites/statusCodeText');
 const appError = require('../utilites/appError');
 const productService = require('../services/product.service ');
 const getId = require('../utilites/getId');
-const productsHelper = require('../helpers/products.helper');
+const validationHelper = require('../helpers/validation');
 const { get } = require('mongoose');
 
 const getAllProducts = asyncWrapper(async(req , res )=>{
     const products = await productService.getAllProducts();
-    productsHelper.validateProductsExist(products);
+    validationHelper.validateDataExist(products, 'No products found');
     res.status(200).json({status:statusCodeText.SUCCESS , data:{products}} );
 })
 
 const getProductById = asyncWrapper(async(req,res)=>{
     const pdId = getId(req);
     const product = await productService.getProductById(pdId);
-    productsHelper.validateProductExist(product);
+    validationHelper.validateItemExist(product, 'Product not found');
     res.status(200).json({status:statusCodeText.SUCCESS , data:{product}});
 })
 
 const addProduct = asyncWrapper(async(req , res )=>{
     const {pdId, pdName, pdDesc , pdPrice,pdCategory ,pdSubCategory , pdImg , pdSize} = req.body;
-    productsHelper.validateAllFieldsProvided({pdId, pdName, pdDesc, pdPrice, pdCategory, pdSubCategory, pdImg});
+    validationHelper.validateAllFieldsProvided({pdId, pdName, pdDesc, pdPrice, pdCategory, pdSubCategory, pdImg});
     const newProduct = {
         pdId,
         pdName,
@@ -40,13 +40,13 @@ const addProduct = asyncWrapper(async(req , res )=>{
 const updateProduct = asyncWrapper(async(req, res )=>{
     const pdId = getId(req);
     const product = await productService.updateProduct(pdId, req.body);
-    productsHelper.validateProductExist(product)
+    validationHelper.validateItemExist(product, 'Product not found');
     res.status(200).json({status:statusCodeText.SUCCESS , message:'Product updated successfully', data:{product}});
 })
 const deleteProduct = asyncWrapper(async(req, res )=>{
     const pdId = getId(req);
     const product = await productService.deleteProduct(pdId);
-    productsHelper.validateProductExist(product);
+    validationHelper.validateItemExist(product, 'Product not found');
     res.status(200).json({status:statusCodeText.SUCCESS , message:'Product deleted successfully', data:null});
 })
 

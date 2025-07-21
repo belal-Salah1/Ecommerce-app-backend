@@ -28,6 +28,6 @@ app.use((err,req,res,next)=>{
         message: err.message
     });
 })
-app.listen(PORT , ()=>{
+app.listen(PORT || 3000 ,'0.0.0.0', ()=>{
     console.log('server started successfully');
 })

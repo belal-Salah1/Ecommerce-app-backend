@@ -5,7 +5,7 @@ const statusCodeText = require('../utilites/statusCodeText');
 const generateJwt = require('../utilites/generateJwt');
 const userService = require('../services/user.service ');
 const validationHelper = require('../helpers/validation');
-
+const appError = require('../utilites/appError');
 const userRegister = asyncWrapper(async (req, res) => {
     const {name , email , password , role } = req.body;
     validationHelper.validateAllFieldsProvided({name , email , password });

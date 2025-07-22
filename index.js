@@ -7,6 +7,7 @@ const productsRouter = require('./routes/products.route');
 const categoriesRouter = require('./routes/categories.route');
 const subCategoriesRouter = require('./routes/subCategories.route');
 const usersRouter = require('./routes/users.route')
+const cors = require('cors');
 mongoose.connect(process.env.MONGO_URL).then(()=>{
     console.log('Connected to mongodb succesfully')
 
@@ -28,6 +29,8 @@ app.use((err,req,res,next)=>{
         message: err.message
     });
 })
+app.use(cors());
+
 app.get('/healthcheck', (req, res) => {
   res.status(200).send('OK');
 });

@@ -5,7 +5,7 @@ const verifyToken = require('../middlewares/verifyToken');
 const allowedTo = require('../middlewares/allowedTo');
 const userRoles = require('../utilites/userRoles');
 router.route('/')
-    .get(verifyToken ,allowedTo(userRoles.ADMIN , userRoles.MANAGER) ,productsController.getAllProducts)
+    .get(verifyToken ,allowedTo(userRoles.ADMIN , userRoles.MANAGER,userRoles.USER) ,productsController.getAllProducts)
     .post(verifyToken,allowedTo(userRoles.ADMIN ), productsController.addProduct);
     
 
@@ -13,7 +13,7 @@ router.route('/')
 
 
 router.route('/:pdId')
-    .get(verifyToken, allowedTo(userRoles.ADMIN , userRoles.MANAGER),productsController.getProductById)
+    .get(verifyToken, allowedTo(userRoles.ADMIN , userRoles.MANAGER,userRoles.USER),productsController.getProductById)
     .patch(verifyToken, allowedTo(userRoles.ADMIN , userRoles.MANAGER),productsController.updateProduct)
     .delete(verifyToken, allowedTo(userRoles.ADMIN), productsController.deleteProduct);
    

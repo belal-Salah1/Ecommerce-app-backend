@@ -17,7 +17,7 @@ const userRegister = asyncWrapper(async (req, res) => {
     const token = await generateJwt({email: user.email , password: user.password, role: user.role});
     user.token = token;
     await user.save();
-    res.status(201).json({ status: statusCodeText.SUCCESS, message : "user created succefully" });
+    res.status(201).json({ status: statusCodeText.SUCCESS, message : "user created succefully" ,data:{user: {name: user.name, email: user.email ,token,role: user.role} }});
 
 });
 

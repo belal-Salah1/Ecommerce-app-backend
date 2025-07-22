@@ -29,6 +29,9 @@ const userLogIn = asyncWrapper(async(req, res)=>{
     const user = await userService.getUserByEmail(email);
     validationHelper.validateItemExist(user, 'User does not exist, please register');
     const matchedPassword = await bcrypt.compare(password, user.password);
+    if(matchedPassword === false){
+        throw new appError(statusCodeText.FAIL, 400, "Invalid password ,please try again");
+    }
     if(user && matchedPassword){
         const token = await generateJwt({email: user.email , password: user.password, role: user.role});
         res.status(200).json({ status: statusCodeText.SUCCESS, message : "user logged in successfully", data:{user: {name: user.name, email: user.email ,token,role: user.role} }});

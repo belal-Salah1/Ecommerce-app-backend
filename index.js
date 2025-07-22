@@ -13,7 +13,7 @@ mongoose.connect(process.env.MONGO_URL).then(()=>{
 
 
 });
-app.options('*', cors());
+app.options('/*splat', cors());
 app.use(cors());
 app.use(express.json());
 app.use('/api/products',productsRouter );

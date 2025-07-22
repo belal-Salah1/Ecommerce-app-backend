@@ -14,6 +14,7 @@ mongoose.connect(process.env.MONGO_URL).then(()=>{
 
 });
 
+app.use(cors());
 app.use(express.json());
 app.use('/api/products',productsRouter );
 app.use('/api/categories', categoriesRouter);   
@@ -29,7 +30,6 @@ app.use((err,req,res,next)=>{
         message: err.message
     });
 })
-app.use(cors());
 
 app.get('/healthcheck', (req, res) => {
   res.status(200).send('OK');

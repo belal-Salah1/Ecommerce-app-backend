@@ -14,7 +14,11 @@ mongoose.connect(process.env.MONGO_URL).then(()=>{
 
 });
 app.options('/*splat', cors());
-app.use(cors());
+app.use(cors({
+     origin: '*',
+      methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Authorization', 'Content-Type']
+}));
 app.use(express.json());
 app.use('/api/products',productsRouter );
 app.use('/api/categories', categoriesRouter);   

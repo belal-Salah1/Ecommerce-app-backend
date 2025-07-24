@@ -6,7 +6,8 @@ const mongoose = require('mongoose');
 const productsRouter = require('./routes/products.route');
 const categoriesRouter = require('./routes/categories.route');
 const subCategoriesRouter = require('./routes/subCategories.route');
-const usersRouter = require('./routes/users.route')
+const usersRouter = require('./routes/users.route');
+const Product = require('./models/products.schema')
 const cors = require('cors');
 mongoose.connect(process.env.MONGO_URL).then(()=>{
     console.log('Connected to mongodb succesfully')

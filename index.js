@@ -35,9 +35,24 @@ app.use((err,req,res,next)=>{
     });
 })
 
-app.get('/healthcheck', (req, res) => {
-  res.status(200).send('OK');
+app.get('/healthcheck', async (req, res) => {
+  try {
+    const product = await Product.findOne();
+    const uptime = process.uptime(); 
+    const random = Math.floor(Math.random() * 1000); 
+
+    res.status(200).json({
+      status: 'ok',
+      time: new Date().toISOString(),
+      productTitle: product?.title || 'No product found',
+      uptimeInSeconds: uptime,
+      randomPingCode: random
+    });
+  } catch (err) {
+    res.status(500).json({ status: 'error', message: err.message });
+  }
 });
+
 
 
 app.listen(PORT || 3000 ,'0.0.0.0', ()=>{
